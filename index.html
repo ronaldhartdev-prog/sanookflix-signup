@@ -9,68 +9,31 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--navy:#0b0d3a;--violet:#1b1160;--orange:#ff8a00;--pink:#f7285c;--cyan:#00b8e6;--yellow:#ffc21a;--muted:#b9bce6;--line:rgba(255,255,255,.16);color-scheme:dark}
+:root{--navy:#0b0d3a;--violet:#1b1160;--orange:#ff8a00;--pink:#f7285c;--cyan:#00b8e6;--yellow:#ffc21a;--muted:#b9bce6;--line:rgba(255,255,255,.16);--glass:rgba(14,16,70,.76);color-scheme:dark}
 *{box-sizing:border-box}
-body{margin:0;min-height:100dvh;display:grid;place-items:center;padding:28px 16px;color:#fff;font-family:Nunito,system-ui,sans-serif;
-background:radial-gradient(60vmax 40vmax at 10% 6%,rgba(255,138,0,.30),transparent 60%),radial-gradient(55vmax 40vmax at 94% 10%,rgba(0,184,230,.28),transparent 60%),radial-gradient(60vmax 45vmax at 70% 100%,rgba(247,40,92,.26),transparent 60%),linear-gradient(160deg,var(--violet),var(--navy) 70%) fixed}
-.star{position:fixed;background:var(--yellow);clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);pointer-events:none}
-.s1{width:34px;height:34px;left:7%;top:9%}.s2{width:22px;height:22px;right:9%;top:17%;background:var(--pink)}.s3{width:26px;height:26px;left:11%;bottom:11%;background:var(--cyan)}.s4{width:40px;height:40px;right:7%;bottom:9%}
-.stage{position:relative;width:100%;max-width:460px;text-align:center}
-.view{display:none}.view.on{display:block}
-.logo{display:block;margin:0 auto;height:auto}
-.logo-xl{width:min(440px,90vw);filter:drop-shadow(0 14px 40px rgba(255,138,0,.35))}
-.on .logo-xl{animation:pop .7s cubic-bezier(.2,.9,.3,1.2) both}
-.logo-sm{width:min(250px,72%);margin-bottom:4px}
-@keyframes pop{from{opacity:0;transform:scale(.88) translateY(10px)}to{opacity:1;transform:none}}
-h1,h2{font-family:Fredoka,Nunito,system-ui,sans-serif;font-weight:600;margin:0}
-h1{font-size:clamp(1.6rem,5.5vw,2.1rem);line-height:1.2;margin-top:18px}
-h2{font-size:1.6rem;margin:6px 0 4px}
-.sub{margin:8px 0 0;color:var(--muted);font-weight:700}
-.actions{display:grid;gap:12px;margin-top:30px}
-.btn{display:flex;align-items:center;justify-content:center;width:100%;min-height:54px;border:0;border-radius:999px;font:600 1.1rem Fredoka,Nunito,system-ui,sans-serif;color:#fff;text-decoration:none;cursor:pointer;transition:transform .15s,box-shadow .15s,background .15s}
-.primary{background:linear-gradient(90deg,var(--orange),var(--pink));box-shadow:0 10px 28px rgba(247,40,92,.35)}
-.primary:hover{transform:translateY(-2px);box-shadow:0 14px 34px rgba(247,40,92,.45)}
-.ghost{background:rgba(255,255,255,.06);border:2px solid var(--cyan)}
-.ghost:hover{background:rgba(0,184,230,.18)}
-.btn:active{transform:scale(.98)}
-.btn:disabled{opacity:.65;cursor:wait;transform:none}
-.btn:focus-visible,.eye:focus-visible{outline:3px solid var(--yellow);outline-offset:3px}
-.card{background:rgba(14,16,70,.74);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:28px;padding:26px 24px 28px;box-shadow:0 30px 80px rgba(0,0,0,.45)}
-.field{display:block;text-align:left;margin-top:14px}
-.field>span,legend{display:block;margin-bottom:6px;font-weight:800;font-size:.92rem;color:var(--muted)}
-input[type=text],input[type=password],input[type=email]{width:100%;min-height:50px;padding:13px 16px;border-radius:14px;border:1.5px solid var(--line);background:rgba(255,255,255,.07);color:#fff;font:inherit;font-weight:600}
-input::placeholder{color:#8286c0}
-input:focus{outline:none;border-color:var(--cyan);box-shadow:0 0 0 4px rgba(0,184,230,.25)}
-.hint{display:block;margin-top:5px;font-size:.82rem;color:var(--muted);font-weight:600}
-.pw{position:relative}.pw input{padding-right:76px}
-.eye{position:absolute;right:6px;top:50%;transform:translateY(-50%);padding:10px;background:none;border:0;border-radius:10px;color:var(--cyan);font:800 .9rem Nunito,system-ui,sans-serif;cursor:pointer}
-fieldset{border:0;margin:16px 0 0;padding:0;text-align:left}
-legend{padding:0}
-.pair{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.pair input{position:absolute;opacity:0;width:1px;height:1px}
-.pair label{display:flex;align-items:center;justify-content:center;min-height:50px;border-radius:14px;border:1.5px solid var(--line);background:rgba(255,255,255,.07);font-weight:800;cursor:pointer;transition:background .15s,border-color .15s}
-.pair label:hover{border-color:var(--cyan)}
-.pair input:checked+label{background:linear-gradient(135deg,var(--cyan),#0a7ce8);border-color:transparent}
-.pair input:focus-visible+label{outline:3px solid var(--yellow);outline-offset:2px}
-.msg{min-height:1.4em;margin:14px 0 6px;color:#ff9db3;font-weight:800;font-size:.95rem}
-form .btn+.btn{margin-top:10px}
-#done .card{padding:36px 24px}
-#done p{color:var(--muted);font-weight:700;margin:8px 0 22px}
-@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+html{min-height:100%;background:var(--navy)}
+body{margin:0;min-height:100dvh;padding:28px 16px 92px;color:#fff;font-family:Nunito,system-ui,sans-serif;overflow-x:hidden;background:radial-gradient(60vmax 40vmax at 10% 6%,rgba(255,138,0,.30),transparent 60%),radial-gradient(55vmax 40vmax at 94% 10%,rgba(0,184,230,.28),transparent 60%),radial-gradient(60vmax 45vmax at 70% 100%,rgba(247,40,92,.26),transparent 60%),linear-gradient(160deg,var(--violet),var(--navy) 70%) fixed}
+.ambient{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0}.orb{position:absolute;border-radius:50%;filter:blur(22px);opacity:.28;animation:drift 11s ease-in-out infinite alternate}.o1{width:180px;height:180px;background:var(--orange);left:-70px;top:25%}.o2{width:220px;height:220px;background:var(--cyan);right:-95px;top:44%;animation-delay:-4s}.o3{width:160px;height:160px;background:var(--pink);left:42%;bottom:-80px;animation-delay:-8s}
+.star{position:fixed;z-index:0;background:var(--yellow);clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);pointer-events:none;animation:twinkle 3.8s ease-in-out infinite}.s1{width:34px;height:34px;left:7%;top:9%}.s2{width:22px;height:22px;right:9%;top:17%;background:var(--pink);animation-delay:-1s}.s3{width:26px;height:26px;left:11%;bottom:11%;background:var(--cyan);animation-delay:-2s}.s4{width:40px;height:40px;right:7%;bottom:9%;animation-delay:-3s}
+.shell{position:relative;z-index:1;width:100%;max-width:480px;margin:0 auto;text-align:center}.view{display:none}.view.on{display:block;animation:viewIn .45s cubic-bezier(.2,.8,.25,1) both}.logo{display:block;margin:0 auto;height:auto;transform-origin:center}.logo-xl{width:min(440px,90vw);filter:drop-shadow(0 14px 40px rgba(255,138,0,.35));animation:logoFloat 4.8s ease-in-out infinite}.logo-sm{width:min(250px,72%);margin-bottom:4px;filter:drop-shadow(0 10px 24px rgba(0,184,230,.18));animation:logoBreathe 4.2s ease-in-out infinite}
+h1,h2{font-family:Fredoka,Nunito,system-ui,sans-serif;font-weight:600;margin:0}h1{font-size:clamp(1.65rem,5.5vw,2.15rem);line-height:1.2;margin-top:18px}h2{font-size:1.65rem;margin:6px 0 4px}.sub{margin:8px 0 0;color:var(--muted);font-weight:700}.tiny{font-size:.82rem;color:var(--muted);font-weight:700}.actions{display:grid;gap:12px;margin-top:30px}.btn{display:flex;align-items:center;justify-content:center;width:100%;min-height:54px;border:0;border-radius:999px;font:600 1.1rem Fredoka,Nunito,system-ui,sans-serif;color:#fff;text-decoration:none;cursor:pointer;transition:transform .18s,box-shadow .18s,background .18s,border-color .18s}.primary{background:linear-gradient(90deg,var(--orange),var(--pink));box-shadow:0 10px 28px rgba(247,40,92,.35)}.primary:hover{transform:translateY(-2px) scale(1.01);box-shadow:0 15px 38px rgba(247,40,92,.45)}.ghost{background:rgba(255,255,255,.06);border:2px solid var(--cyan)}.ghost:hover{background:rgba(0,184,230,.18);transform:translateY(-1px)}.soft{background:rgba(255,194,26,.08);border:1px solid rgba(255,194,26,.38);color:#ffe276}.btn:active{transform:scale(.98)}.btn:disabled{opacity:.65;cursor:wait;transform:none}.btn:focus-visible,.eye:focus-visible,.text-link:focus-visible{outline:3px solid var(--yellow);outline-offset:3px}
+.card{position:relative;background:var(--glass);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid var(--line);border-radius:28px;padding:26px 24px 28px;box-shadow:0 30px 80px rgba(0,0,0,.45);overflow:hidden}.card:before{content:"";position:absolute;inset:-1px;background:linear-gradient(120deg,rgba(255,138,0,.18),transparent 34%,rgba(0,184,230,.14) 68%,rgba(247,40,92,.14));pointer-events:none}.card>*{position:relative}.field{display:block;text-align:left;margin-top:14px}.field>span,legend{display:block;margin-bottom:6px;font-weight:800;font-size:.92rem;color:var(--muted)}input[type=text],input[type=password],input[type=email]{width:100%;min-height:50px;padding:13px 16px;border-radius:14px;border:1.5px solid var(--line);background:rgba(255,255,255,.07);color:#fff;font:inherit;font-weight:600;transition:border-color .16s,box-shadow .16s,transform .16s}input::placeholder{color:#8286c0}input:focus{outline:none;border-color:var(--cyan);box-shadow:0 0 0 4px rgba(0,184,230,.25);transform:translateY(-1px)}.hint{display:block;margin-top:5px;font-size:.82rem;color:var(--muted);font-weight:600}.pw{position:relative}.pw input{padding-right:76px}.eye{position:absolute;right:6px;top:50%;transform:translateY(-50%);padding:10px;background:none;border:0;border-radius:10px;color:var(--cyan);font:800 .9rem Nunito,system-ui,sans-serif;cursor:pointer}fieldset{border:0;margin:16px 0 0;padding:0;text-align:left}legend{padding:0}.pair{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:10px}.pair input{position:absolute;opacity:0;width:1px;height:1px}.pair label{display:flex;align-items:center;justify-content:center;min-height:50px;border-radius:14px;border:1.5px solid var(--line);background:rgba(255,255,255,.07);font-weight:800;cursor:pointer;transition:background .15s,border-color .15s,transform .15s}.pair label:hover{border-color:var(--cyan);transform:translateY(-1px)}.pair input:checked+label{background:linear-gradient(135deg,var(--cyan),#0a7ce8);border-color:transparent}.pair input:focus-visible+label{outline:3px solid var(--yellow);outline-offset:2px}.msg{min-height:1.4em;margin:14px 0 6px;color:#ff9db3;font-weight:800;font-size:.95rem}.msg.good{color:#6fffd2}.progress{display:flex;justify-content:center;gap:8px;margin:18px 0 4px}.dot{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.2)}.dot.on{background:var(--cyan);box-shadow:0 0 16px rgba(0,184,230,.8)}form .btn+.btn{margin-top:10px}.text-link{display:inline-block;margin-top:16px;border:0;background:none;color:var(--cyan);font:800 .94rem Nunito,sans-serif;cursor:pointer;text-decoration:underline;text-underline-offset:3px}.success-icon{width:72px;height:72px;margin:0 auto 12px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,var(--cyan),#0a7ce8);font:700 2rem Fredoka;box-shadow:0 0 0 8px rgba(0,184,230,.1);animation:successPop .6s cubic-bezier(.2,.9,.3,1.25) both}.footer{position:relative;z-index:1;text-align:center;margin:30px auto 0;font-size:.78rem;color:rgba(255,255,255,.58)}.coffee{color:#ffd66b;text-decoration:none;font-weight:800}.coffee:hover{color:#fff}.maint-note{display:none;margin-top:8px;color:#ffd66b;font-weight:800}.maint-note.on{display:block;animation:viewIn .3s ease both}
+@keyframes viewIn{from{opacity:0;transform:translateY(12px) scale(.985)}to{opacity:1;transform:none}}@keyframes logoFloat{0%,100%{transform:translateY(0) rotate(-.4deg)}50%{transform:translateY(-7px) rotate(.4deg)}}@keyframes logoBreathe{0%,100%{transform:scale(1)}50%{transform:scale(1.018)}}@keyframes twinkle{0%,100%{opacity:.55;transform:scale(.88) rotate(0)}50%{opacity:1;transform:scale(1.08) rotate(10deg)}}@keyframes drift{from{transform:translate3d(-10px,-8px,0) scale(.96)}to{transform:translate3d(18px,16px,0) scale(1.06)}}@keyframes successPop{from{opacity:0;transform:scale(.6) rotate(-18deg)}to{opacity:1;transform:none}}
+@media (max-width:480px){body{padding:20px 14px 86px}.card{padding:23px 18px 25px;border-radius:24px}.logo-xl{width:min(390px,92vw)}}@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 </style>
 </head>
 <body>
+<div class="ambient" aria-hidden="true"><i class="orb o1"></i><i class="orb o2"></i><i class="orb o3"></i></div>
 <i class="star s1" aria-hidden="true"></i><i class="star s2" aria-hidden="true"></i><i class="star s3" aria-hidden="true"></i><i class="star s4" aria-hidden="true"></i>
-
-<main class="stage">
-
+<main class="shell">
   <section id="landing" class="view on">
     <img class="logo logo-xl" src="logo.png" alt="SanookFlix Entertainment">
     <h1>Good Stories Brighter Together</h1>
     <p class="sub">Movies • Shows • A Brighter Tomorrow</p>
     <div class="actions">
-      <button class="btn primary" id="go-signup" type="button">Create account</button>
-      <a class="btn ghost" href="https://sanookflix.online">Sign in</a>
+      <a class="btn primary" href="https://sanookflix.online">Sign in</a>
+      <button class="btn ghost" id="go-signup" type="button">Create account</button>
+      <button class="text-link" id="go-forgot" type="button">Forgot password?</button>
     </div>
   </section>
 
@@ -78,116 +41,47 @@ form .btn+.btn{margin-top:10px}
     <div class="card">
       <img class="logo logo-sm" src="logo.png" alt="SanookFlix">
       <h2>Create your account</h2>
-      <form id="form">
-        <label class="field"><span>Username</span>
-          <input id="username" type="text" autocomplete="username" autocapitalize="none" spellcheck="false" required minlength="2" maxlength="32" pattern="[A-Za-z0-9 _'.@+\-]{2,32}" title="Letters, numbers and - _ . @ + only">
-          <small class="hint">You will use this to sign in.</small>
-        </label>
-        <label class="field"><span>Full name</span>
-          <input id="fullname" type="text" autocomplete="name" required>
-        </label>
-        <label class="field"><span>Password</span>
-          <span class="pw"><input id="password" type="password" autocomplete="new-password" required>
-          <button class="eye" id="eye" type="button" aria-label="Show password">Show</button></span>
-        </label>
-        <label class="field"><span>Confirm password</span>
-          <input id="confirm" type="password" autocomplete="new-password" required>
-        </label>
-        <fieldset>
-          <legend>I am</legend>
-          <div class="pair">
-            <input type="radio" name="age" id="age-minor" value="Minor" required><label for="age-minor">Under 18</label>
-            <input type="radio" name="age" id="age-adult" value="Adult"><label for="age-adult">18 or older</label>
-          </div>
-        </fieldset>
-        <label class="field"><span id="email-label">Email</span>
-          <input id="email" type="email" autocomplete="email" required>
-          <small class="hint" id="email-hint">Password reset codes are sent here.</small>
-        </label>
-        <p class="msg" id="msg" role="alert"></p>
-        <button class="btn primary" id="submit" type="submit">Create account</button>
-        <button class="btn ghost" id="back" type="button">Back</button>
+      <p class="sub">A few details and your screen is ready.</p>
+      <form id="signup-form">
+        <label class="field"><span>Username</span><input id="username" type="text" autocomplete="username" autocapitalize="none" spellcheck="false" required minlength="2" maxlength="32" pattern="[A-Za-z0-9 _'.@+\-]{2,32}" title="Letters, numbers and - _ . @ + only"><small class="hint">You will use this to sign in.</small></label>
+        <label class="field"><span>Full name</span><input id="fullname" type="text" autocomplete="name" required></label>
+        <label class="field"><span>Password</span><span class="pw"><input id="password" type="password" autocomplete="new-password" required><button class="eye" id="eye" type="button" aria-label="Show password">Show</button></span></label>
+        <label class="field"><span>Confirm password</span><input id="confirm" type="password" autocomplete="new-password" required></label>
+        <fieldset><legend>I am</legend><div class="pair"><input type="radio" name="age" id="age-minor" value="Minor" required><label for="age-minor">Under 18</label><input type="radio" name="age" id="age-adult" value="Adult"><label for="age-adult">18 or older</label></div></fieldset>
+        <label class="field"><span id="email-label">Email</span><input id="email" type="email" autocomplete="email" required><small class="hint" id="email-hint">Password reset codes are sent here.</small></label>
+        <p class="msg" id="signup-msg" role="alert"></p>
+        <button class="btn primary" id="signup-submit" type="submit">Create account</button><button class="btn ghost back-home" type="button">Back</button>
       </form>
     </div>
   </section>
 
-  <section id="done" class="view">
-    <div class="card">
-      <img class="logo logo-sm" src="logo.png" alt="SanookFlix">
-      <h2>You’re in!</h2>
-      <p>Your account is ready. Taking you to sign in…</p>
-      <a class="btn primary" href="https://sanookflix.online">Sign in now</a>
-    </div>
-  </section>
+  <section id="forgot" class="view"><div class="card"><img class="logo logo-sm" src="logo.png" alt="SanookFlix"><div class="progress"><i class="dot on"></i><i class="dot"></i><i class="dot"></i></div><h2>Reset your password</h2><p class="sub">Enter the username or email address linked to your account.</p><form id="forgot-form"><label class="field"><span>Username or email</span><input id="identifier" type="text" autocomplete="username" required placeholder="Username or email"></label><p class="msg" id="forgot-msg" role="alert"></p><button class="btn primary" id="forgot-submit" type="submit">Email my reset PIN</button><button class="btn ghost back-home" type="button">Back</button></form></div></section>
 
+  <section id="verify" class="view"><div class="card"><img class="logo logo-sm" src="logo.png" alt="SanookFlix"><div class="progress"><i class="dot on"></i><i class="dot on"></i><i class="dot"></i></div><h2>Check your email</h2><p class="sub">Enter the Jellyfin reset PIN we just sent.</p><form id="verify-form"><label class="field"><span>Reset PIN</span><input id="reset-pin" type="text" autocomplete="one-time-code" autocapitalize="characters" spellcheck="false" required placeholder="AB-CD-EF-12"></label><p class="msg" id="verify-msg" role="alert"></p><button class="btn primary" id="verify-submit" type="submit">Verify PIN</button><button class="btn ghost" id="restart-reset" type="button">Start again</button></form></div></section>
+
+  <section id="new-password" class="view"><div class="card"><img class="logo logo-sm" src="logo.png" alt="SanookFlix"><div class="progress"><i class="dot on"></i><i class="dot on"></i><i class="dot on"></i></div><h2>Choose a new password</h2><p class="sub">Make it something memorable and private.</p><form id="new-password-form"><label class="field"><span>New password</span><span class="pw"><input id="new-pass" type="password" autocomplete="new-password" required minlength="4"><button class="eye" id="new-eye" type="button">Show</button></span></label><label class="field"><span>Confirm new password</span><input id="new-confirm" type="password" autocomplete="new-password" required minlength="4"></label><p class="msg" id="new-msg" role="alert"></p><button class="btn primary" id="new-submit" type="submit">Change password</button></form></div></section>
+
+  <section id="reset-done" class="view"><div class="card"><div class="success-icon">✓</div><img class="logo logo-sm" src="logo.png" alt="SanookFlix"><h2>Password changed!</h2><p class="sub">You can now sign in with your new password.</p><div class="actions"><a class="btn primary" href="https://sanookflix.online">Sign in now</a><button class="btn ghost back-home" type="button">Back to welcome</button></div></div></section>
+
+  <section id="done" class="view"><div class="card"><div class="success-icon">✓</div><img class="logo logo-sm" src="logo.png" alt="SanookFlix"><h2>You’re in!</h2><p class="sub">Your account is ready. Taking you to sign in…</p><div class="actions"><a class="btn primary" href="https://sanookflix.online">Sign in now</a></div></div></section>
 </main>
-
+<footer class="footer">Enjoying SanookFlix? <a class="coffee" id="coffee" href="#maintenance">☕ Buy me a coffee</a><div class="maint-note" id="maintenance" role="status">Coffee page is under maintenance. Check back soon.</div></footer>
 <script>
-const API = 'https://webhook.sanookflix.online/webhook/signup';
-const SIGNIN = 'https://sanookflix.online';
-const $ = id => document.getElementById(id);
-
-function show(id) {
-  document.querySelectorAll('.view').forEach(v => v.classList.toggle('on', v.id === id));
-  window.scrollTo(0, 0);
-}
-$('go-signup').onclick = () => show('signup');
-$('back').onclick = () => show('landing');
-
-const COPY = {
-  Minor: ['Parent or guardian’s email', 'A parent or guardian should type their own email here. Password reset codes are sent to it.'],
-  Adult: ['Your email', 'Password reset codes are sent here if you forget your password.']
-};
-document.querySelectorAll('input[name="age"]').forEach(r => r.addEventListener('change', () => {
-  $('email-label').textContent = COPY[r.value][0];
-  $('email-hint').textContent = COPY[r.value][1];
-}));
-
-$('eye').onclick = () => {
-  const hide = $('password').type === 'password';
-  $('password').type = $('confirm').type = hide ? 'text' : 'password';
-  $('eye').textContent = hide ? 'Hide' : 'Show';
-  $('eye').setAttribute('aria-label', hide ? 'Hide password' : 'Show password');
-};
-
-$('form').addEventListener('submit', async e => {
-  e.preventDefault();
-  const msg = $('msg'), btn = $('submit');
-  msg.textContent = '';
-  if ($('password').value !== $('confirm').value) {
-    msg.textContent = 'The two passwords don’t match. Please type them again.';
-    return;
-  }
-  const payload = {
-    username: $('username').value.trim().toLowerCase(),
-    fullName: $('fullname').value.trim(),
-    email: $('email').value.trim().toLowerCase(),
-    password: $('password').value,
-    ageGroup: document.querySelector('input[name="age"]:checked').value,
-    source: 'SanookFlix Signup Page'
-  };
-  btn.disabled = true;
-  btn.textContent = 'Creating your account…';
-  try {
-    const res = await fetch(API, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
-    let data = null;
-    try { data = await res.json(); } catch (_) {}
-    if (res.ok && data && data.ok) {
-      show('done');
-      setTimeout(() => { window.location.href = SIGNIN; }, 3000);
-      return;
-    }
-    msg.textContent = (data && data.message) || 'Something went wrong. Please try again.';
-  } catch (err) {
-    msg.textContent = 'Can’t reach SanookFlix right now. Check your internet and try again.';
-  }
-  btn.disabled = false;
-  btn.textContent = 'Create account';
-});
+const ENDPOINTS={signup:'https://webhook.sanookflix.online/webhook/signup',request:'https://webhook.sanookflix.online/webhook/forgot-password',verify:'https://webhook.sanookflix.online/webhook/verify-reset-pin',setPassword:'https://webhook.sanookflix.online/webhook/set-new-password'};
+const SIGNIN='https://sanookflix.online'; const $=id=>document.getElementById(id); let resetState={identifier:'',username:'',pin:''};
+function show(id){document.querySelectorAll('.view').forEach(v=>v.classList.toggle('on',v.id===id));window.scrollTo({top:0,behavior:'smooth'});}
+function busy(btn,on,label,working){btn.disabled=on;btn.textContent=on?working:label;}
+async function post(url,payload){const res=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});let data=null;try{data=await res.json()}catch(_){ }if(!res.ok)throw new Error(data&&data.message?data.message:'Something went wrong. Please try again.');return data||{};}
+$('go-signup').onclick=()=>show('signup'); $('go-forgot').onclick=()=>show('forgot'); document.querySelectorAll('.back-home').forEach(b=>b.onclick=()=>show('landing')); $('restart-reset').onclick=()=>{resetState={identifier:'',username:'',pin:''};$('identifier').value='';show('forgot')};
+const COPY={Minor:['Parent or guardian’s email','A parent or guardian should type their own email here. Password reset codes are sent to it.'],Adult:['Your email','Password reset codes are sent here if you forget your password.']};
+document.querySelectorAll('input[name="age"]').forEach(r=>r.addEventListener('change',()=>{$('email-label').textContent=COPY[r.value][0];$('email-hint').textContent=COPY[r.value][1]}));
+$('eye').onclick=()=>{const h=$('password').type==='password';$('password').type=$('confirm').type=h?'text':'password';$('eye').textContent=h?'Hide':'Show'};
+$('new-eye').onclick=()=>{const h=$('new-pass').type==='password';$('new-pass').type=$('new-confirm').type=h?'text':'password';$('new-eye').textContent=h?'Hide':'Show'};
+$('signup-form').addEventListener('submit',async e=>{e.preventDefault();const msg=$('signup-msg'),btn=$('signup-submit');msg.textContent='';if($('password').value!==$('confirm').value){msg.textContent='The two passwords don’t match. Please type them again.';return}const age=document.querySelector('input[name="age"]:checked');if(!age)return;busy(btn,true,'Create account','Creating your account…');try{const data=await post(ENDPOINTS.signup,{username:$('username').value.trim().toLowerCase(),fullName:$('fullname').value.trim(),email:$('email').value.trim().toLowerCase(),password:$('password').value,ageGroup:age.value,source:'SanookFlix Signup Page'});if(data.ok){show('done');setTimeout(()=>location.href=SIGNIN,3000);return}throw new Error(data.message||'Something went wrong. Please try again.')}catch(err){msg.textContent=err.message||'Can’t reach SanookFlix right now.'}busy(btn,false,'Create account','')});
+$('forgot-form').addEventListener('submit',async e=>{e.preventDefault();const msg=$('forgot-msg'),btn=$('forgot-submit');msg.textContent='';resetState.identifier=$('identifier').value.trim().toLowerCase();busy(btn,true,'Email my reset PIN','Sending your PIN…');try{const data=await post(ENDPOINTS.request,{identifier:resetState.identifier});resetState.username=data.username||'';show('verify')}catch(err){msg.textContent=err.message||'We couldn’t start the reset. Please try again.'}busy(btn,false,'Email my reset PIN','')});
+$('verify-form').addEventListener('submit',async e=>{e.preventDefault();const msg=$('verify-msg'),btn=$('verify-submit');msg.textContent='';resetState.pin=$('reset-pin').value.trim().toUpperCase();busy(btn,true,'Verify PIN','Checking PIN…');try{const data=await post(ENDPOINTS.verify,{pin:resetState.pin});if(!data.ok)throw new Error(data.message||'That PIN could not be verified.');resetState.username=data.username||resetState.username;if(!resetState.username)throw new Error('PIN accepted, but the username was not returned.');show('new-password')}catch(err){msg.textContent=err.message||'That PIN could not be verified.'}busy(btn,false,'Verify PIN','')});
+$('new-password-form').addEventListener('submit',async e=>{e.preventDefault();const msg=$('new-msg'),btn=$('new-submit');msg.textContent='';if($('new-pass').value!==$('new-confirm').value){msg.textContent='The two passwords don’t match.';return}busy(btn,true,'Change password','Changing password…');try{const data=await post(ENDPOINTS.setPassword,{username:resetState.username,pin:resetState.pin,newPassword:$('new-pass').value});if(!data.ok)throw new Error(data.message||'Password change failed.');resetState={identifier:'',username:'',pin:''};show('reset-done')}catch(err){msg.textContent=err.message||'Password change failed. Please try again.'}busy(btn,false,'Change password','')});
+$('coffee').onclick=e=>{e.preventDefault();$('maintenance').classList.toggle('on')};
 </script>
 </body>
 </html>
