@@ -1,147 +1,179 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SanookFlix - Welcome</title>
-    <style>
-        body {
-            background-color: #111;
-            color: #fff;
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-        .card {
-            background: #1a1a1a;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-            width: 350px;
-            text-align: center;
-        }
-        .logo {
-            max-width: 120px;
-            margin-bottom: 15px;
-        }
-        h2 { color: #0084ff; margin-bottom: 20px; }
-        input, select {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            background: #2a2a2a;
-            border: 1px solid #444;
-            color: #fff;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-        button {
-            width: 100%;
-            padding: 10px;
-            background: #0084ff;
-            border: none;
-            color: white;
-            font-weight: bold;
-            border-radius: 4px;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-        button:hover { background: #006dd6; }
-        .secondary-btn {
-            background: transparent;
-            border: 1px solid #0084ff;
-            color: #0084ff;
-            margin-top: 10px;
-        }
-        .secondary-btn:hover { background: rgba(0,132,255,0.1); }
-        .hidden { display: none; }
-        .error { color: #ff4d4d; font-size: 13px; margin: 5px 0; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SanookFlix – Welcome</title>
+<link rel="icon" type="image/png" href="data:image/png;base64,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">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0b0d3a;--violet:#1b1160;--orange:#ff8a00;--pink:#f7285c;--cyan:#00b8e6;--yellow:#ffc21a;--muted:#b9bce6;--line:rgba(255,255,255,.16);color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;min-height:100dvh;display:grid;place-items:center;padding:28px 16px;color:#fff;font-family:Nunito,system-ui,sans-serif;
+background:radial-gradient(60vmax 40vmax at 10% 6%,rgba(255,138,0,.30),transparent 60%),radial-gradient(55vmax 40vmax at 94% 10%,rgba(0,184,230,.28),transparent 60%),radial-gradient(60vmax 45vmax at 70% 100%,rgba(247,40,92,.26),transparent 60%),linear-gradient(160deg,var(--violet),var(--navy) 70%) fixed}
+.star{position:fixed;background:var(--yellow);clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);pointer-events:none}
+.s1{width:34px;height:34px;left:7%;top:9%}.s2{width:22px;height:22px;right:9%;top:17%;background:var(--pink)}.s3{width:26px;height:26px;left:11%;bottom:11%;background:var(--cyan)}.s4{width:40px;height:40px;right:7%;bottom:9%}
+.stage{position:relative;width:100%;max-width:460px;text-align:center}
+.view{display:none}.view.on{display:block}
+.logo{display:block;margin:0 auto;height:auto}
+.logo-xl{width:min(440px,90vw);filter:drop-shadow(0 14px 40px rgba(255,138,0,.35))}
+.on .logo-xl{animation:pop .7s cubic-bezier(.2,.9,.3,1.2) both}
+.logo-sm{width:min(250px,72%);margin-bottom:4px}
+@keyframes pop{from{opacity:0;transform:scale(.88) translateY(10px)}to{opacity:1;transform:none}}
+h1,h2{font-family:Fredoka,Nunito,system-ui,sans-serif;font-weight:600;margin:0}
+h1{font-size:clamp(1.6rem,5.5vw,2.1rem);line-height:1.2;margin-top:18px}
+h2{font-size:1.6rem;margin:6px 0 4px}
+.sub{margin:8px 0 0;color:var(--muted);font-weight:700}
+.actions{display:grid;gap:12px;margin-top:30px}
+.btn{display:flex;align-items:center;justify-content:center;width:100%;min-height:54px;border:0;border-radius:999px;font:600 1.1rem Fredoka,Nunito,system-ui,sans-serif;color:#fff;text-decoration:none;cursor:pointer;transition:transform .15s,box-shadow .15s,background .15s}
+.primary{background:linear-gradient(90deg,var(--orange),var(--pink));box-shadow:0 10px 28px rgba(247,40,92,.35)}
+.primary:hover{transform:translateY(-2px);box-shadow:0 14px 34px rgba(247,40,92,.45)}
+.ghost{background:rgba(255,255,255,.06);border:2px solid var(--cyan)}
+.ghost:hover{background:rgba(0,184,230,.18)}
+.btn:active{transform:scale(.98)}
+.btn:disabled{opacity:.65;cursor:wait;transform:none}
+.btn:focus-visible,.eye:focus-visible{outline:3px solid var(--yellow);outline-offset:3px}
+.card{background:rgba(14,16,70,.74);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:28px;padding:26px 24px 28px;box-shadow:0 30px 80px rgba(0,0,0,.45)}
+.field{display:block;text-align:left;margin-top:14px}
+.field>span,legend{display:block;margin-bottom:6px;font-weight:800;font-size:.92rem;color:var(--muted)}
+input[type=text],input[type=password]{width:100%;min-height:50px;padding:13px 16px;border-radius:14px;border:1.5px solid var(--line);background:rgba(255,255,255,.07);color:#fff;font:inherit;font-weight:600}
+input::placeholder{color:#8286c0}
+input:focus{outline:none;border-color:var(--cyan);box-shadow:0 0 0 4px rgba(0,184,230,.25)}
+.hint{display:block;margin-top:5px;font-size:.82rem;color:var(--muted);font-weight:600}
+.pw{position:relative}.pw input{padding-right:76px}
+.eye{position:absolute;right:6px;top:50%;transform:translateY(-50%);padding:10px;background:none;border:0;border-radius:10px;color:var(--cyan);font:800 .9rem Nunito,system-ui,sans-serif;cursor:pointer}
+fieldset{border:0;margin:16px 0 0;padding:0;text-align:left}
+legend{padding:0}
+.pair{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pair input{position:absolute;opacity:0;width:1px;height:1px}
+.pair label{display:flex;align-items:center;justify-content:center;min-height:50px;border-radius:14px;border:1.5px solid var(--line);background:rgba(255,255,255,.07);font-weight:800;cursor:pointer;transition:background .15s,border-color .15s}
+.pair label:hover{border-color:var(--cyan)}
+.pair input:checked+label{background:linear-gradient(135deg,var(--cyan),#0a7ce8);border-color:transparent}
+.pair input:focus-visible+label{outline:3px solid var(--yellow);outline-offset:2px}
+.msg{min-height:1.4em;margin:14px 0 6px;color:#ff9db3;font-weight:800;font-size:.95rem}
+form .btn+.btn{margin-top:10px}
+#done .card{padding:36px 24px}
+#done p{color:var(--muted);font-weight:700;margin:8px 0 22px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
 </head>
 <body>
+<i class="star s1" aria-hidden="true"></i><i class="star s2" aria-hidden="true"></i><i class="star s3" aria-hidden="true"></i><i class="star s4" aria-hidden="true"></i>
 
-    <div class="card" id="landing-view">
-        <img src="logo.png" alt="SanookFlix Logo" class="logo" onerror="this.style.display='none'">
-        <h2>SanookFlix</h2>
-        <p>Welcome to your media platform</p>
-        <button onclick="showSignup()">Create New Account</button>
-        <button class="secondary-btn" onclick="window.location.href='https://sanookflix.online'">Sign In to Existing Account</button>
+<main class="stage">
+
+  <section id="landing" class="view on">
+    <img class="logo logo-xl" src="logo.png" alt="SanookFlix Entertainment">
+    <h1>Good Stories Brighter Together</h1>
+    <p class="sub">Movies • Shows • A Brighter Tomorrow</p>
+    <div class="actions">
+      <button class="btn primary" id="go-signup" type="button">Create account</button>
+      <a class="btn ghost" href="https://sanookflix.online">Sign in</a>
     </div>
+  </section>
 
-    <div class="card hidden" id="signup-view">
-        <img src="logo.png" alt="SanookFlix Logo" class="logo" onerror="this.style.display='none'">
-        <h2>Create Account</h2>
-        <form id="signup-form" onsubmit="handleSignup(event)">
-            <input type="text" id="username" placeholder="Choose Username" required>
-            <div id="username-error" class="error"></div>
-            
-            <input type="text" id="fullname" placeholder="Your Full Name" required>
-            <input type="password" id="password" placeholder="Choose Password" required>
-            
-            <select id="ageGroup" required>
-                <option value="">Select Age Group / Template</option>
-                <option value="Adult">Adult (18+)</option>
-                <option value="Minor">Minor (Under 18)</option>
-            </select>
-            
-            <button type="submit">Submit & Create Account</button>
-            <button type="button" class="secondary-btn" onclick="showLanding()">Back</button>
-        </form>
+  <section id="signup" class="view">
+    <div class="card">
+      <img class="logo logo-sm" src="logo.png" alt="SanookFlix">
+      <h2>Create your account</h2>
+      <form id="form">
+        <label class="field"><span>Username</span>
+          <input id="username" type="text" autocomplete="username" autocapitalize="none" spellcheck="false" required minlength="2" maxlength="32" pattern="[A-Za-z0-9 _'.@+\-]{2,32}" title="Letters, numbers and - _ . @ + only">
+          <small class="hint">You will use this to sign in.</small>
+        </label>
+        <label class="field"><span>Full name</span>
+          <input id="fullname" type="text" autocomplete="name" required>
+        </label>
+        <label class="field"><span>Password</span>
+          <span class="pw"><input id="password" type="password" autocomplete="new-password" required>
+          <button class="eye" id="eye" type="button" aria-label="Show password">Show</button></span>
+        </label>
+        <label class="field"><span>Confirm password</span>
+          <input id="confirm" type="password" autocomplete="new-password" required>
+        </label>
+        <fieldset>
+          <legend>I am</legend>
+          <div class="pair">
+            <input type="radio" name="age" id="age-minor" value="Minor" required><label for="age-minor">Under 18</label>
+            <input type="radio" name="age" id="age-adult" value="Adult"><label for="age-adult">18 or older</label>
+          </div>
+        </fieldset>
+        <p class="msg" id="msg" role="alert"></p>
+        <button class="btn primary" id="submit" type="submit">Create account</button>
+        <button class="btn ghost" id="back" type="button">Back</button>
+      </form>
     </div>
+  </section>
 
-    <script>
-        const existingUsernames = ["admin", "ronald", "kevin"];
+  <section id="done" class="view">
+    <div class="card">
+      <img class="logo logo-sm" src="logo.png" alt="SanookFlix">
+      <h2>You’re in!</h2>
+      <p>Your account is ready. Taking you to sign in…</p>
+      <a class="btn primary" href="https://sanookflix.online">Sign in now</a>
+    </div>
+  </section>
 
-        function showSignup() {
-            document.getElementById('landing-view').classList.add('hidden');
-            document.getElementById('signup-view').classList.remove('hidden');
-        }
+</main>
 
-        function showLanding() {
-            document.getElementById('signup-view').classList.add('hidden');
-            document.getElementById('landing-view').classList.remove('hidden');
-        }
+<script>
+const API = 'https://webhook.sanookflix.online/webhook/signup';
+const SIGNIN = 'https://sanookflix.online';
+const $ = id => document.getElementById(id);
 
-        async function handleSignup(event) {
-            event.preventDefault();
-            const username = document.getElementById('username').value.trim().toLowerCase();
-            const fullname = document.getElementById('fullname').value;
-            const password = document.getElementById('password').value;
-            const ageGroup = document.getElementById('ageGroup').value;
-            const errDiv = document.getElementById('username-error');
+function show(id) {
+  document.querySelectorAll('.view').forEach(v => v.classList.toggle('on', v.id === id));
+  window.scrollTo(0, 0);
+}
+$('go-signup').onclick = () => show('signup');
+$('back').onclick = () => show('landing');
 
-            if (existingUsernames.includes(username)) {
-                errDiv.textContent = "Username already taken. Please choose another.";
-                return;
-            }
-            errDiv.textContent = "";
+$('eye').onclick = () => {
+  const hide = $('password').type === 'password';
+  $('password').type = $('confirm').type = hide ? 'text' : 'password';
+  $('eye').textContent = hide ? 'Hide' : 'Show';
+  $('eye').setAttribute('aria-label', hide ? 'Hide password' : 'Show password');
+};
 
-            const payload = {
-                username: username,
-                fullName: fullname,
-                password: password,
-                ageGroup: ageGroup,
-                source: "SanookFlix Signup Page"
-            };
-
-            try {
-                // Replace with your public n8n webhook URL if accessible externally, 
-                // or leave configured for your webhook receiver route
-                await fetch('https://webhook.sanookflix.online/webhook/signup', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-            } catch (e) {
-                console.log("Webhook dispatched");
-            }
-
-            alert("Account created successfully! Redirecting you to sign in.");
-            window.location.href = 'https://sanookflix.online';
-        }
-    </script>
+$('form').addEventListener('submit', async e => {
+  e.preventDefault();
+  const msg = $('msg'), btn = $('submit');
+  msg.textContent = '';
+  if ($('password').value !== $('confirm').value) {
+    msg.textContent = 'The two passwords don’t match. Please type them again.';
+    return;
+  }
+  const payload = {
+    username: $('username').value.trim().toLowerCase(),
+    fullName: $('fullname').value.trim(),
+    password: $('password').value,
+    ageGroup: document.querySelector('input[name="age"]:checked').value,
+    source: 'SanookFlix Signup Page'
+  };
+  btn.disabled = true;
+  btn.textContent = 'Creating your account…';
+  try {
+    const res = await fetch(API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    let data = null;
+    try { data = await res.json(); } catch (_) {}
+    if (res.ok && data && data.ok) {
+      show('done');
+      setTimeout(() => { window.location.href = SIGNIN; }, 3000);
+      return;
+    }
+    msg.textContent = (data && data.message) || 'Something went wrong. Please try again.';
+  } catch (err) {
+    msg.textContent = 'Can’t reach SanookFlix right now. Check your internet and try again.';
+  }
+  btn.disabled = false;
+  btn.textContent = 'Create account';
+});
+</script>
 </body>
 </html>
