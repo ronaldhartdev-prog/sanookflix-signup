@@ -239,6 +239,29 @@ o.style.left=(6+82*p)+'%';o.style.top=(66-56*Math.sin(Math.PI*p))+'%';
 o.style.setProperty('--orb',day?rgb(mx([255,243,176],[255,150,70],e)):'#f4f1d6');o.style.setProperty('--orbg',day?`rgba(255,${Math.round(220-90*e)},80,.6)`:'rgba(220,220,255,.35)')}
 sky();setInterval(sky,60000);
 fetch('https://api.open-meteo.com/v1/forecast?latitude=13.75&longitude=100.52&current=weather_code&daily=sunrise,sunset&timezone=Asia%2FBangkok&forecast_days=1').then(r=>r.json()).then(d=>{const c=d.current.weather_code;W=c>=95?'storm':(c>=51&&c<=67)||(c>=80&&c<=82)?'rain':(c>=2&&c<=3)||c===45||c===48?'cloudy':'clear';document.body.dataset.weather=W;SR=hm(d.daily.sunrise[0]);SS=hm(d.daily.sunset[0]);sky();if(W==='rain'||W==='storm'){const r=document.querySelector('.rain');for(let i=0;i<70;i++){const e=document.createElement('i');e.className='drop';e.style.cssText=`left:${rnd(0,100)}%;animation-duration:${rnd(.7,1.3)}s;animation-delay:${-rnd(0,2)}s;opacity:${rnd(.3,.8)}`;r.appendChild(e)}}}).catch(()=>{});
+
+/* Direct legal-page routing: supports #terms, #privacy, ?view=terms and ?view=privacy. */
+(function(){
+  function legalRoute(){
+    var hash=(window.location.hash||'').replace(/^#/,'').toLowerCase();
+    var query=new URLSearchParams(window.location.search).get('view');
+    var route=(hash||query||'').toLowerCase();
+    if(route==='terms'||route==='privacy'){
+      show(route);
+      return true;
+    }
+    return false;
+  }
+  document.querySelectorAll('[data-show="terms"],[data-show="privacy"]').forEach(function(el){
+    el.addEventListener('click',function(){
+      history.replaceState(null,'','#'+el.dataset.show);
+    });
+  });
+  window.addEventListener('hashchange',legalRoute);
+  window.addEventListener('pageshow',legalRoute);
+  window.addEventListener('load',function(){ setTimeout(legalRoute,0); });
+  setTimeout(legalRoute,0);
+})();
 </script>
 </body>
 </html>
