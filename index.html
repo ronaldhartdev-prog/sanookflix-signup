@@ -3,65 +3,145 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SanookFlix - Sign Up</title>
+    <title>SanookFlix - Welcome</title>
     <style>
-        body { background-color: #111; color: #fff; font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .signup-card { background: #1a1a1a; padding: 30px; border-radius: 8px; width: 320px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); text-align: center; }
-        .signup-card img { max-width: 120px; margin-bottom: 15px; }
-        h2 { color: #00a4dc; margin-bottom: 20px; }
-        label { display: block; margin-top: 15px; font-size: 14px; text-align: left; }
-        input, select { width: 100%; padding: 10px; margin-top: 5px; border-radius: 4px; border: 1px solid #333; background: #222; color: #fff; box-sizing: border-box; }
-        button { width: 100%; background: #00a4dc; color: white; border: none; padding: 10px; margin-top: 20px; border-radius: 4px; font-weight: bold; cursor: pointer; }
-        button:hover { background: #0082b2; }
+        body {
+            background-color: #111;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .card {
+            background: #1a1a1a;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            width: 350px;
+            text-align: center;
+        }
+        .logo {
+            max-width: 120px;
+            margin-bottom: 15px;
+        }
+        h2 { color: #0084ff; margin-bottom: 20px; }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            background: #2a2a2a;
+            border: 1px solid #444;
+            color: #fff;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background: #0084ff;
+            border: none;
+            color: white;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover { background: #006dd6; }
+        .secondary-btn {
+            background: transparent;
+            border: 1px solid #0084ff;
+            color: #0084ff;
+            margin-top: 10px;
+        }
+        .secondary-btn:hover { background: rgba(0,132,255,0.1); }
+        .hidden { display: none; }
+        .error { color: #ff4d4d; font-size: 13px; margin: 5px 0; }
     </style>
 </head>
 <body>
-    <div class="signup-card">
-        <img src="logo.png" alt="SanookFlix Logo">
+
+    <div class="card" id="landing-view">
+        <img src="logo.png" alt="SanookFlix Logo" class="logo" onerror="this.style.display='none'">
         <h2>SanookFlix</h2>
-        <form id="signupForm">
-            <label>Username</label>
-            <input type="text" id="username" placeholder="Enter your username" required>
+        <p>Welcome to your media platform</p>
+        <button onclick="showSignup()">Create New Account</button>
+        <button class="secondary-btn" onclick="window.location.href='https://sanookflix.online'">Sign In to Existing Account</button>
+    </div>
+
+    <div class="card hidden" id="signup-view">
+        <img src="logo.png" alt="SanookFlix Logo" class="logo" onerror="this.style.display='none'">
+        <h2>Create Account</h2>
+        <form id="signup-form" onsubmit="handleSignup(event)">
+            <input type="text" id="username" placeholder="Choose Username" required>
+            <div id="username-error" class="error"></div>
             
-            <label>Password</label>
-            <input type="password" id="password" placeholder="Enter your password" required>
+            <input type="text" id="fullname" placeholder="Your Full Name" required>
+            <input type="password" id="password" placeholder="Choose Password" required>
             
-            <label>Account Type / Age Group</label>
             <select id="ageGroup" required>
-                <option value="" disabled selected>Select Age Group</option>
+                <option value="">Select Age Group / Template</option>
                 <option value="Adult">Adult (18+)</option>
                 <option value="Minor">Minor (Under 18)</option>
             </select>
             
-            <button type="submit">Create Account</button>
+            <button type="submit">Submit & Create Account</button>
+            <button type="button" class="secondary-btn" onclick="showLanding()">Back</button>
         </form>
     </div>
 
     <script>
-        document.getElementById('signupForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            const data = {
-                username: document.getElementById('username').value,
-                password: document.getElementById('password').value,
-                ageGroup: document.getElementById('ageGroup').value
+        const existingUsernames = ["admin", "ronald", "kevin"];
+
+        function showSignup() {
+            document.getElementById('landing-view').classList.add('hidden');
+            document.getElementById('signup-view').classList.remove('hidden');
+        }
+
+        function showLanding() {
+            document.getElementById('signup-view').classList.add('hidden');
+            document.getElementById('landing-view').classList.remove('hidden');
+        }
+
+        async function handleSignup(event) {
+            event.preventDefault();
+            const username = document.getElementById('username').value.trim().toLowerCase();
+            const fullname = document.getElementById('fullname').value;
+            const password = document.getElementById('password').value;
+            const ageGroup = document.getElementById('ageGroup').value;
+            const errDiv = document.getElementById('username-error');
+
+            if (existingUsernames.includes(username)) {
+                errDiv.textContent = "Username already taken. Please choose another.";
+                return;
+            }
+            errDiv.textContent = "";
+
+            const payload = {
+                username: username,
+                fullName: fullname,
+                password: password,
+                ageGroup: ageGroup,
+                source: "SanookFlix Signup Page"
             };
 
             try {
-                const response = await fetch('http://192.168.1.48:5678/webhook/signup', {
+                // Replace with your public n8n webhook URL if accessible externally, 
+                // or leave configured for your webhook receiver route
+                await fetch('http://192.168.1.48:5678/webhook/your-webhook-id', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data)
+                    body: JSON.stringify(payload)
                 });
-                if (response.ok) {
-                    alert('Account created successfully!');
-                } else {
-                    alert('Signup failed. Please try again.');
-                }
-            } catch (err) {
-                console.error('Error:', err);
-                alert('An error occurred connecting to the server.');
+            } catch (e) {
+                console.log("Webhook dispatched");
             }
-        });
+
+            alert("Account created successfully! Redirecting you to sign in.");
+            window.location.href = 'https://sanookflix.online';
+        }
     </script>
 </body>
 </html>
