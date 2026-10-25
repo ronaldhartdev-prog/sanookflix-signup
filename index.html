@@ -38,7 +38,7 @@ h2{font-size:1.6rem;margin:6px 0 4px}
 .card{background:rgba(14,16,70,.74);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:28px;padding:26px 24px 28px;box-shadow:0 30px 80px rgba(0,0,0,.45)}
 .field{display:block;text-align:left;margin-top:14px}
 .field>span,legend{display:block;margin-bottom:6px;font-weight:800;font-size:.92rem;color:var(--muted)}
-input[type=text],input[type=password]{width:100%;min-height:50px;padding:13px 16px;border-radius:14px;border:1.5px solid var(--line);background:rgba(255,255,255,.07);color:#fff;font:inherit;font-weight:600}
+input[type=text],input[type=password],input[type=email]{width:100%;min-height:50px;padding:13px 16px;border-radius:14px;border:1.5px solid var(--line);background:rgba(255,255,255,.07);color:#fff;font:inherit;font-weight:600}
 input::placeholder{color:#8286c0}
 input:focus{outline:none;border-color:var(--cyan);box-shadow:0 0 0 4px rgba(0,184,230,.25)}
 .hint{display:block;margin-top:5px;font-size:.82rem;color:var(--muted);font-weight:600}
@@ -100,6 +100,10 @@ form .btn+.btn{margin-top:10px}
             <input type="radio" name="age" id="age-adult" value="Adult"><label for="age-adult">18 or older</label>
           </div>
         </fieldset>
+        <label class="field"><span id="email-label">Email</span>
+          <input id="email" type="email" autocomplete="email" required>
+          <small class="hint" id="email-hint">Password reset codes are sent here.</small>
+        </label>
         <p class="msg" id="msg" role="alert"></p>
         <button class="btn primary" id="submit" type="submit">Create account</button>
         <button class="btn ghost" id="back" type="button">Back</button>
@@ -130,6 +134,15 @@ function show(id) {
 $('go-signup').onclick = () => show('signup');
 $('back').onclick = () => show('landing');
 
+const COPY = {
+  Minor: ['Parent or guardian’s email', 'A parent or guardian should type their own email here. Password reset codes are sent to it.'],
+  Adult: ['Your email', 'Password reset codes are sent here if you forget your password.']
+};
+document.querySelectorAll('input[name="age"]').forEach(r => r.addEventListener('change', () => {
+  $('email-label').textContent = COPY[r.value][0];
+  $('email-hint').textContent = COPY[r.value][1];
+}));
+
 $('eye').onclick = () => {
   const hide = $('password').type === 'password';
   $('password').type = $('confirm').type = hide ? 'text' : 'password';
@@ -148,6 +161,7 @@ $('form').addEventListener('submit', async e => {
   const payload = {
     username: $('username').value.trim().toLowerCase(),
     fullName: $('fullname').value.trim(),
+    email: $('email').value.trim().toLowerCase(),
     password: $('password').value,
     ageGroup: document.querySelector('input[name="age"]:checked').value,
     source: 'SanookFlix Signup Page'
