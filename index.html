@@ -6,9 +6,10 @@
     <title>SanookFlix - Sign Up</title>
     <style>
         body { background-color: #111; color: #fff; font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .signup-card { background: #1a1a1a; padding: 30px; border-radius: 8px; width: 300px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
-        h2 { text-align: center; color: #00a4dc; }
-        label { display: block; margin-top: 15px; font-size: 14px; }
+        .signup-card { background: #1a1a1a; padding: 30px; border-radius: 8px; width: 320px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); text-align: center; }
+        .signup-card img { max-width: 120px; margin-bottom: 15px; }
+        h2 { color: #00a4dc; margin-bottom: 20px; }
+        label { display: block; margin-top: 15px; font-size: 14px; text-align: left; }
         input, select { width: 100%; padding: 10px; margin-top: 5px; border-radius: 4px; border: 1px solid #333; background: #222; color: #fff; box-sizing: border-box; }
         button { width: 100%; background: #00a4dc; color: white; border: none; padding: 10px; margin-top: 20px; border-radius: 4px; font-weight: bold; cursor: pointer; }
         button:hover { background: #0082b2; }
@@ -16,22 +17,51 @@
 </head>
 <body>
     <div class="signup-card">
+        <img src="logo.png" alt="SanookFlix Logo">
         <h2>SanookFlix</h2>
-        <form>
+        <form id="signupForm">
             <label>Username</label>
-            <input type="text" placeholder="Enter your username" required>
+            <input type="text" id="username" placeholder="Enter your username" required>
             
             <label>Password</label>
-            <input type="password" placeholder="Enter your password" required>
+            <input type="password" id="password" placeholder="Enter your password" required>
             
-            <label>Account Type</label>
-            <select>
-                <option value="kid">Kid (Restricted Content)</option>
-                <option value="adult">Adult (Full Access)</option>
+            <label>Account Type / Age Group</label>
+            <select id="ageGroup" required>
+                <option value="" disabled selected>Select Age Group</option>
+                <option value="Adult">Adult (18+)</option>
+                <option value="Minor">Minor (Under 18)</option>
             </select>
             
             <button type="submit">Create Account</button>
         </form>
     </div>
+
+    <script>
+        document.getElementById('signupForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const data = {
+                username: document.getElementById('username').value,
+                password: document.getElementById('password').value,
+                ageGroup: document.getElementById('ageGroup').value
+            };
+
+            try {
+                const response = await fetch('http://192.168.1.48:5678/webhook/signup', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                if (response.ok) {
+                    alert('Account created successfully!');
+                } else {
+                    alert('Signup failed. Please try again.');
+                }
+            } catch (err) {
+                console.error('Error:', err);
+                alert('An error occurred connecting to the server.');
+            }
+        });
+    </script>
 </body>
 </html>
