@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Connect a TV – SanookFlix</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0b0d3a;--panel:rgba(14,16,76,.82);--blue:#08c6ee;--pink:#f72867;--orange:#ff8a00;--gold:#ffd21f;--soft:#c7caf2}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{font-family:Nunito,system-ui,sans-serif;color:#fff;background:radial-gradient(60% 50% at 10% 95%,rgba(250,119,8,.35),transparent 70%),radial-gradient(55% 45% at 92% 6%,rgba(15,153,199,.35),transparent 70%),linear-gradient(180deg,#0a0c3d,#1c1470 62%,#4a1f7a);background-attachment:fixed;display:flex;align-items:center;justify-content:center;padding:24px 16px}
+.card{width:min(100%,440px);padding:26px 24px 28px;border-radius:28px;background:var(--panel);border:1.5px solid rgba(99,224,255,.5);box-shadow:0 0 60px rgba(120,80,255,.25),0 30px 80px rgba(0,0,0,.5);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+.logo{display:block;width:min(240px,70%);margin:0 auto 10px}
+h1{font:700 1.6rem Fredoka,sans-serif;text-align:center;margin:6px 0 6px}
+.sub{color:var(--soft);text-align:center;margin:0 0 20px;line-height:1.45}
+label{display:block;font-weight:800;font-size:.92rem;margin:14px 0 6px}
+input{width:100%;min-height:50px;padding:12px 14px;border-radius:14px;border:1.5px solid rgba(255,255,255,.18);background:rgba(255,255,255,.07);color:#fff;font:700 1.05rem Nunito,sans-serif;outline:none}
+input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(8,198,238,.25)}
+#code{font:700 1.6rem Fredoka,sans-serif;letter-spacing:.35em;text-align:center}
+.btn{display:block;width:100%;min-height:54px;margin-top:22px;border:0;border-radius:999px;background:linear-gradient(90deg,#FD4067,#FA7708);color:#fff;font:700 1.15rem Fredoka,sans-serif;box-shadow:0 12px 30px rgba(253,64,103,.4);cursor:pointer}
+.btn:disabled{opacity:.6;cursor:wait}
+.msg{min-height:1.4em;margin:14px 0 0;text-align:center;font-weight:800;color:#ff8fb0}
+.ok{text-align:center}
+.ok .big{font-size:3.2rem;margin:4px 0}
+.hint{color:var(--soft);font-size:.86rem;text-align:center;margin:18px 0 0;line-height:1.45}
+.hint a{color:var(--blue);font-weight:800}
+.hide{display:none}
+</style>
+</head>
+<body>
+<main class="card">
+  <img class="logo" src="logo.png" alt="SanookFlix">
+  <section id="form-view">
+    <h1>Connect a TV</h1>
+    <p class="sub">On the TV, press <b>Use Quick Connect</b>. Then sign in here and type the 6-digit code from the TV screen.</p>
+    <form id="f" autocomplete="on">
+      <label for="user">Username</label>
+      <input id="user" name="username" autocomplete="username" autocapitalize="none" spellcheck="false" required>
+      <label for="pw">Password</label>
+      <input id="pw" name="password" type="password" autocomplete="current-password" required>
+      <label for="code">TV code</label>
+      <input id="code" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="one-time-code" placeholder="000000" required>
+      <button class="btn" id="go">Connect TV</button>
+      <p class="msg" id="msg" role="alert"></p>
+    </form>
+    <p class="hint">Only your own account is connected. Your password goes straight to SanookFlix over an encrypted connection.<br>No account yet? <a href="https://signup.sanookflix.online/">Sign up</a></p>
+  </section>
+  <section id="done-view" class="ok hide">
+    <div class="big">📺✨</div>
+    <h1>Your TV is signing in!</h1>
+    <p class="sub">Look at the TV, it opens SanookFlix in a moment. You can close this page.</p>
+  </section>
+</main>
+<script>
+(function () {
+  var SERVER = 'https://sanookflix.online';
+  var $ = function (id) { return document.getElementById(id); };
+  var q = new URLSearchParams(location.search).get('code');
+  if (q && /^\d{6}$/.test(q)) $('code').value = q;
+  $('code').addEventListener('input', function () { this.value = this.value.replace(/\D/g, '').slice(0, 6); });
+  var dev = 'sfconnect-' + Math.random().toString(36).slice(2, 12);
+  function auth(token) {
+    var h = 'MediaBrowser Client="SanookFlix Connect", Device="Phone", DeviceId="' + dev + '", Version="1.0"';
+    return token ? h + ', Token="' + token + '"' : h;
+  }
+  $('f').addEventListener('submit', async function (e) {
+    e.preventDefault();
+    var msg = $('msg'), btn = $('go');
+    var code = $('code').value.trim();
+    msg.textContent = '';
+    if (!/^\d{6}$/.test(code)) { msg.textContent = 'The TV code has 6 numbers.'; return; }
+    btn.disabled = true; btn.textContent = 'Connecting…';
+    var token = null;
+    try {
+      var r = await fetch(SERVER + '/Users/AuthenticateByName', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': auth() },
+        body: JSON.stringify({ Username: $('user').value.trim(), Pw: $('pw').value })
+      });
+      if (r.status === 401 || r.status === 403) throw new Error('That username or password is not right.');
+      if (!r.ok) throw new Error('SanookFlix could not be reached. Please try again.');
+      token = (await r.json()).AccessToken;
+      var a = await fetch(SERVER + '/QuickConnect/Authorize?code=' + encodeURIComponent(code), {
+        method: 'POST', headers: { 'Authorization': auth(token) }
+      });
+      if (!a.ok) throw new Error('That TV code is wrong or has expired. Press Quick Connect on the TV again.');
+      $('form-view').classList.add('hide');
+      $('done-view').classList.remove('hide');
+    } catch (err) {
+      msg.textContent = err.message || 'Something went wrong. Please try again.';
+    } finally {
+      if (token) { fetch(SERVER + '/Sessions/Logout', { method: 'POST', headers: { 'Authorization': auth(token) } }).catch(function () {}); }
+      $('pw').value = '';
+      btn.disabled = false; btn.textContent = 'Connect TV';
+    }
+  });
+})();
+</script>
+</body>
+</html>
