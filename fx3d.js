@@ -200,6 +200,16 @@
       { g: sample(P2, 160), w: 46 * k, a: .45, speed: -0.35, tw: 1.6, ph: 1.3 },
       { g: sample(P1, 220), w: 74 * k, a: 1, speed: 0.6, tw: 2.2, ph: 0 }
     ];
+    reels.forEach(function (r) {
+      var sc = document.createElement('canvas'); sc.width = Math.max(1, Math.round(W)); sc.height = Math.max(1, Math.round(H));
+      var sx = sc.getContext('2d');
+      sx.filter = 'blur(' + Math.round(r.w * .22) + 'px)';
+      sx.strokeStyle = 'rgba(0,0,0,.32)'; sx.lineWidth = r.w * .7; sx.lineCap = 'round';
+      sx.beginPath();
+      r.g.p.forEach(function (q, i) { if (i) sx.lineTo(q[0], q[1] + r.w * .6); else sx.moveTo(q[0], q[1] + r.w * .6); });
+      sx.stroke();
+      r.shadow = sc;
+    });
   }
   function at(g, s) {
     if (s <= 0) return 0; if (s >= g.L) return g.N - 1;
@@ -214,10 +224,8 @@
     var g = r.g, N = g.N, i, th = [], c = [], hw = [];
     for (i = 0; i <= N; i++) { th[i] = (g.s[i] / g.L) * Math.PI * r.tw + phase * Math.sign(r.speed) + r.ph; c[i] = Math.cos(th[i]); hw[i] = r.w / 2 * c[i]; }
     ctx.globalAlpha = r.a;
-    // soft shadow under the reel
-    ctx.save(); ctx.fillStyle = 'rgba(0,0,0,.28)';
-    for (i = 0; i < N; i += 2) { var j = Math.min(N, i + 2), sw = Math.max(Math.abs(hw[i]), 6); ctx.beginPath(); ctx.ellipse(g.p[i][0], g.p[i][1] + r.w * .55, sw * .9, sw * .35, 0, 0, Math.PI * 2); ctx.fill(); }
-    ctx.restore();
+    // soft shadow under the reel (pre-blurred once in size())
+    if (r.shadow) ctx.drawImage(r.shadow, 0, 0, W, H);
     // strip body: lighter where it faces you, darker where it turns away
     for (i = 0; i < N; i++) {
       var f = Math.abs(c[i]), front = c[i] > 0, L = front ? 18 + 30 * f : 10 + 14 * f;
