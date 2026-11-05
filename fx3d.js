@@ -165,114 +165,26 @@
   }
   var big = document.querySelector('.mascot.mz img'); if (big) big.src = 'mascot-sm.png';
 
-  /* ---------- 3D twisting film reel on a canvas ---------- */
-  var old = document.querySelector('svg.film');
-  if (!old) return;
-  var cv = document.createElement('canvas');
-  cv.className = 'film film3d';
-  cv.setAttribute('aria-hidden', 'true');
-  old.replaceWith(cv);
-  var ctx = cv.getContext('2d'), W = 0, H = 0;
-  var P1 = [[-60, 230], [240, 40], [640, 340], [1260, 80]], P2 = [[-60, 110], [300, 250], [780, 10], [1260, 175]];
-  var reels = [];
-  function sample(p, N) {
-    var pts = [], len = [0], i, t, u, x, y;
-    for (i = 0; i <= N; i++) {
-      t = i / N; u = 1 - t;
-      x = u * u * u * p[0][0] + 3 * u * u * t * p[1][0] + 3 * u * t * t * p[2][0] + t * t * t * p[3][0];
-      y = u * u * u * p[0][1] + 3 * u * u * t * p[1][1] + 3 * u * t * t * p[2][1] + t * t * t * p[3][1];
-      pts.push([x * W / 1200, y * H / 300]);
-      if (i) len.push(len[i - 1] + Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]));
-    }
-    var nrm = pts.map(function (q, i) {
-      var a = pts[Math.max(0, i - 1)], b = pts[Math.min(N, i + 1)], dx = b[0] - a[0], dy = b[1] - a[1], l = Math.hypot(dx, dy) || 1;
-      return [-dy / l, dx / l];
-    });
-    return { p: pts, n: nrm, s: len, L: len[N], N: N };
-  }
-  function size() {
-    var dpr = Math.min(window.devicePixelRatio || 1, 2), r = cv.getBoundingClientRect();
-    W = r.width; H = r.height;
-    cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    var k = Math.min(1, W / 1200) * 0.55 + 0.45;
-    reels = [
-      { g: sample(P2, 160), w: 46 * k, a: .45, speed: -0.35, tw: 1.6, ph: 1.3 },
-      { g: sample(P1, 220), w: 74 * k, a: 1, speed: 0.6, tw: 2.2, ph: 0 }
-    ];
-    reels.forEach(function (r) {
-      var sc = document.createElement('canvas'); sc.width = Math.max(1, Math.round(W)); sc.height = Math.max(1, Math.round(H));
-      var sx = sc.getContext('2d');
-      sx.filter = 'blur(' + Math.round(r.w * .22) + 'px)';
-      sx.strokeStyle = 'rgba(0,0,0,.32)'; sx.lineWidth = r.w * .7; sx.lineCap = 'round';
-      sx.beginPath();
-      r.g.p.forEach(function (q, i) { if (i) sx.lineTo(q[0], q[1] + r.w * .6); else sx.moveTo(q[0], q[1] + r.w * .6); });
-      sx.stroke();
-      r.shadow = sc;
-    });
-  }
-  function at(g, s) {
-    if (s <= 0) return 0; if (s >= g.L) return g.N - 1;
-    var lo = 0, hi = g.N;
-    while (hi - lo > 1) { var mid = (lo + hi) >> 1; if (g.s[mid] < s) lo = mid; else hi = mid; }
-    return lo;
-  }
-  function pt(g, i, v, hw) { return [g.p[i][0] + g.n[i][0] * hw * v, g.p[i][1] + g.n[i][1] * hw * v]; }
-  function quad(a, b, c, d) { ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.lineTo(c[0], c[1]); ctx.lineTo(d[0], d[1]); ctx.closePath(); ctx.fill(); }
-  var off = 0, phase = 0;
-  function drawReel(r) {
-    var g = r.g, N = g.N, i, th = [], c = [], hw = [];
-    for (i = 0; i <= N; i++) { th[i] = (g.s[i] / g.L) * Math.PI * r.tw + phase * Math.sign(r.speed) + r.ph; c[i] = Math.cos(th[i]); hw[i] = r.w / 2 * c[i]; }
-    ctx.globalAlpha = r.a;
-    // soft shadow under the reel (pre-blurred once in size())
-    if (r.shadow) ctx.drawImage(r.shadow, 0, 0, W, H);
-    // strip body: lighter where it faces you, darker where it turns away
-    for (i = 0; i < N; i++) {
-      var f = Math.abs(c[i]), front = c[i] > 0, L = front ? 18 + 30 * f : 10 + 14 * f;
-      ctx.fillStyle = 'hsl(' + (front ? 236 : 240) + ',70%,' + L + '%)';
-      quad(pt(g, i, 1, hw[i]), pt(g, i + 1, 1.02, hw[i + 1]), pt(g, i + 1, -1.02, hw[i + 1]), pt(g, i, -1, hw[i]));
-    }
-    // glossy rims
-    ctx.lineWidth = 2;
-    [1, -1].forEach(function (side) {
-      for (i = 0; i < N; i++) {
-        var f2 = Math.abs(c[i]); if (f2 < .12) continue;
-        ctx.strokeStyle = 'rgba(140,155,255,' + (0.25 + 0.6 * f2) + ')';
-        var a = pt(g, i, side, hw[i]), b = pt(g, i + 1, side, hw[i + 1]);
-        ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.stroke();
-      }
-    });
-    // perforations
-    var gap = 18, hl = 7, s0 = ((off * r.speed) % gap + gap) % gap;
-    for (var s = s0; s < g.L - hl; s += gap) {
-      var i1 = at(g, s), i2 = at(g, s + hl), f3 = Math.abs(c[i1]); if (f3 < .18) continue;
-      ctx.fillStyle = 'rgba(240,243,255,' + (0.35 + 0.6 * f3) + ')';
-      quad(pt(g, i1, .70, hw[i1]), pt(g, i2, .70, hw[i2]), pt(g, i2, .88, hw[i2]), pt(g, i1, .88, hw[i1]));
-      quad(pt(g, i1, -.70, hw[i1]), pt(g, i2, -.70, hw[i2]), pt(g, i2, -.88, hw[i2]), pt(g, i1, -.88, hw[i1]));
-    }
-    // picture frames, rainbow on the front, dim on the back
-    var fg = 48, fw = 40, f0 = ((off * r.speed) % fg + fg) % fg;
-    for (s = f0 - fg; s < g.L; s += fg) {
-      var a1 = Math.max(0, s), a2 = Math.min(g.L - 1, s + fw); if (a2 <= a1) continue;
-      var j1 = at(g, a1), j2 = at(g, a2), cc = (c[j1] + c[j2]) / 2, f4 = Math.abs(cc); if (f4 < .15) continue;
-      var hue = (a1 / g.L) * 230 + 20;
-      ctx.fillStyle = cc > 0 ? 'hsla(' + hue + ',95%,' + (42 + 22 * f4) + '%,' + (0.55 + 0.4 * f4) + ')' : 'hsla(' + hue + ',50%,22%,.55)';
-      quad(pt(g, j1, .56, hw[j1]), pt(g, j2, .56, hw[j2]), pt(g, j2, -.56, hw[j2]), pt(g, j1, -.56, hw[j1]));
-      if (cc > .5) { ctx.fillStyle = 'rgba(255,255,255,' + (0.18 * f4) + ')'; quad(pt(g, j1, .56, hw[j1]), pt(g, j2, .56, hw[j2]), pt(g, j2, .3, hw[j2]), pt(g, j1, .3, hw[j1])); }
-    }
-    ctx.globalAlpha = 1;
-  }
-  var last = 0;
-  function frame(t) {
-    if (t - last > 33) { // ~30 frames per second is plenty and kind to phones
-      last = t;
-      ctx.clearRect(0, 0, W, H);
-      reels.forEach(drawReel);
-      off += 1.2; phase += 0.006;
-    }
-    if (!reduce) requestAnimationFrame(frame);
-  }
-  size();
-  addEventListener('resize', function () { size(); if (reduce) frame(1e9); });
-  if (reduce) frame(1e9); else requestAnimationFrame(frame);
+  /* ---------- cinema spotlights (replaces the old film strip) ---------- */
+  (function () {
+    var host = (typeof root !== 'undefined' && root) ? root : document.querySelector('.sky');
+    var oldFilm = (host || document).querySelector('svg.film, canvas.film');
+    if (oldFilm) oldFilm.remove();
+    if (!host) return;
+    var bcss = '.beams{position:absolute;inset:0;overflow:hidden;pointer-events:none}' +
+      '.beam{position:absolute;bottom:-12vh;width:34vw;min-width:260px;height:135vh;transform-origin:50% 100%;will-change:transform;' +
+      'clip-path:polygon(46% 100%,54% 100%,100% 0,0 0);filter:blur(7px)}' +
+      '.beam.b1{left:-4vw;background:linear-gradient(to top,rgba(255,226,140,.30),rgba(255,226,140,.10) 45%,rgba(255,226,140,0) 82%);animation:sfbeam1 16s ease-in-out infinite alternate}' +
+      '.beam.b2{right:-4vw;background:linear-gradient(to top,rgba(140,220,255,.26),rgba(140,220,255,.08) 45%,rgba(140,220,255,0) 82%);animation:sfbeam2 19s ease-in-out infinite alternate}' +
+      '.beam.b3{left:38vw;width:26vw;background:linear-gradient(to top,rgba(255,140,200,.20),rgba(255,140,200,.06) 45%,rgba(255,140,200,0) 80%);animation:sfbeam3 23s ease-in-out infinite alternate}' +
+      '.beams::after{content:"";position:absolute;left:0;right:0;bottom:0;height:22vh;background:radial-gradient(60% 100% at 50% 100%,rgba(255,210,120,.16),transparent 70%)}' +
+      '@keyframes sfbeam1{from{transform:rotate(-30deg)}to{transform:rotate(16deg)}}' +
+      '@keyframes sfbeam2{from{transform:rotate(28deg)}to{transform:rotate(-14deg)}}' +
+      '@keyframes sfbeam3{from{transform:rotate(-12deg)}to{transform:rotate(14deg)}}' +
+      '@media(prefers-reduced-motion:reduce){.beam{animation:none!important}}';
+    var s = document.createElement('style'); s.textContent = bcss; document.head.appendChild(s);
+    var b = document.createElement('div'); b.className = 'beams'; b.setAttribute('aria-hidden', 'true');
+    b.innerHTML = '<i class="beam b1"></i><i class="beam b2"></i><i class="beam b3"></i>';
+    host.insertBefore(b, host.firstChild);
+  })();
 })();
