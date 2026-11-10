@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Get the SanookFlix TV app</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="mascot-sm.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;700;800&display=swap">
+<style>
+:root{--orange:#ff8a00;--pink:#f72867;--cyan:#08c6ee;--yellow:#ffd21f;--muted:#c7caf2;--line:rgba(255,255,255,.2);color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;min-height:100dvh;color:#fff;font-family:Nunito,system-ui,sans-serif;background:linear-gradient(180deg,#0a0c3d,#241270 62%,#5a1f8a) fixed}
+.page{position:relative;z-index:1;padding:18px 16px 70px;width:min(100%,980px);margin:0 auto}
+header{display:flex;align-items:center;gap:14px;margin-bottom:10px}
+header img{width:clamp(64px,11vw,96px);height:auto;filter:drop-shadow(0 8px 20px rgba(255,138,0,.45))}
+h1{font:700 clamp(1.7rem,5.5vw,2.6rem)/1.1 Fredoka,sans-serif;margin:0}
+.grad{background:linear-gradient(90deg,var(--orange),var(--pink) 50%,var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
+.lead{color:var(--muted);font-weight:700;margin:6px 0 18px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+.card{padding:18px 20px 22px;border-radius:26px;background:rgba(14,16,76,.78);border:1.5px solid rgba(99,224,255,.45);box-shadow:0 0 0 1px rgba(255,145,199,.25),0 0 50px rgba(120,80,255,.22)}
+.card.soon{opacity:.72;border-color:var(--line)}
+.card h2{font:600 1.35rem Fredoka,sans-serif;margin:0 0 2px}
+.plat{color:var(--muted);font-weight:800;font-size:.85rem;margin:0 0 10px}
+.note{color:#e7e8ff;font-size:.92rem;margin:8px 0}
+.btn{display:flex;align-items:center;justify-content:center;width:100%;min-height:54px;margin-top:12px;padding:12px 20px;border:0;border-radius:999px;font:700 1.1rem Fredoka,sans-serif;color:#fff;text-decoration:none;background:linear-gradient(90deg,var(--pink),var(--orange));box-shadow:0 8px 22px rgba(247,40,103,.38)}
+.btn:focus-visible,summary:focus-visible,a:focus-visible{outline:3px solid var(--yellow);outline-offset:2px}
+.badge{display:inline-block;margin-left:8px;padding:2px 10px;border-radius:999px;background:rgba(8,198,238,.22);border:1px solid var(--cyan);font:700 .72rem Nunito,sans-serif;vertical-align:middle}
+.soon .badge{background:rgba(255,255,255,.1);border-color:var(--line)}
+details{margin-top:14px;border-top:1px solid var(--line);padding-top:10px}
+summary{cursor:pointer;font-weight:800;color:var(--cyan)}
+ol{padding-left:22px;margin:10px 0}
+li{margin:8px 0;font-size:.95rem}
+pre{overflow:auto;padding:12px;border-radius:12px;background:rgba(0,0,0,.45);font-size:.8rem;line-height:1.5;white-space:pre}
+.easy{margin-top:22px;padding:16px 20px;border-radius:22px;background:rgba(255,255,255,.07);border:1px solid var(--line)}
+.easy b{color:#ffe477}
+.back{display:inline-block;margin:22px 0 0;color:var(--cyan);font-weight:800}
+.foot{margin-top:26px;color:var(--muted);font-size:.8rem}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<main class="page">
+<header><img src="mascot-sm.png" alt=""><div><h1>Get <span class="grad">SanookFlix</span> on your TV</h1></div></header>
+<p class="lead">Pick your TV below. New TV apps appear here as we finish them.</p>
+
+<div id="apps" class="grid" aria-live="polite"><p>Loading…</p></div>
+
+<div class="easy"><b>No install needed:</b> open the TV's web browser and go to <b>sanookflix.online</b>. It works on most smart TVs, just without the app extras.</div>
+
+<a class="back" href="./">← Back to create an account</a>
+<p class="foot">The TV apps are based on the open-source Jellyfin project (MPL 2.0). They only connect to sanookflix.online.</p>
+</main>
+
+<script>
+(function(){
+  var root=document.getElementById('apps');
+  function el(t,c,h){var e=document.createElement(t);if(c)e.className=c;if(h!=null)e.textContent=h;return e}
+  function render(list){
+    root.textContent='';
+    list.forEach(function(a){
+      var ok=a.status==='available';
+      var card=el('section','card'+(ok?'':' soon'));
+      var h=el('h2',null,(a.icon||'📺')+' '+a.name);
+      h.appendChild(el('span','badge',ok?('Version '+a.version):'Coming soon'));
+      card.appendChild(h);
+      card.appendChild(el('p','plat',a.platform||''));
+      if(a.note)card.appendChild(el('p','note',a.note));
+      if(ok&&a.file){
+        var b=el('a','btn','⬇ Download for '+a.name+(a.size?' ('+a.size+')':''));
+        b.href=a.file;b.setAttribute('download','');
+        card.appendChild(b);
+        if(a.steps&&a.steps.length){
+          var d=el('details');d.appendChild(el('summary',null,'How to install'));
+          var ol=el('ol');a.steps.forEach(function(s){ol.appendChild(el('li',null,s))});d.appendChild(ol);
+          if(a.commands){d.appendChild(el('p','note','Commands (replace TV_ADDRESS with the address shown in the Developer Mode app; on Windows add .cmd to each ares-… command if PowerShell blocks it):'));d.appendChild(el('pre',null,a.commands))}
+          card.appendChild(d);
+        }
+      }
+      root.appendChild(card);
+    });
+  }
+  var x=new XMLHttpRequest();x.open('GET','apps.json?'+Date.now());
+  x.onload=function(){try{render(JSON.parse(x.responseText).apps)}catch(e){root.textContent='Could not load the list. Please try again later.'}};
+  x.onerror=function(){root.textContent='Could not load the list. Please try again later.'};
+  x.send();
+})();
+</script>
+<!-- the same live weather sky as the app; if it cannot load, the plain night gradient stays -->
+<script defer src="https://sanookflix.online/web/sanook-sky.js"></script>
+</body>
+</html>

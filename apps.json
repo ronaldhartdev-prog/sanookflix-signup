@@ -1,0 +1,49 @@
+{
+  "updated": "2026-11-10",
+  "apps": [
+    {
+      "id": "lg",
+      "icon": "📺",
+      "name": "LG Smart TV",
+      "platform": "webOS",
+      "status": "available",
+      "version": "1.0.0",
+      "file": "downloads/sanookflix-lg.ipk",
+      "size": "5.3 MB",
+      "note": "Tested on an LG UK6300 (2018). Needs a one-time set-up with a computer (LG Developer Mode).",
+      "steps": [
+        "Make a free LG developer account at webostv.developer.lge.com.",
+        "On the TV open the LG Content Store, install the \"Developer Mode\" app, sign in, switch Dev Mode ON (the TV restarts), then open it again and switch Key Server ON. Note the TV address and the passphrase it shows.",
+        "On a Windows computer on the same network, install the LG tools (needs Node.js): npm install -g @webos-tools/cli",
+        "Download the file above, then in a terminal in the same folder run the commands shown below. Type the passphrase when asked.",
+        "Sanookflix appears in the TV's app list. Sign in with Quick Connect (code on the TV, finish on your phone at signup.sanookflix.online/tv.html).",
+        "Developer Mode runs out after about 1000 hours (roughly 40 days): open the Developer Mode app on the TV and press the button to extend the timer."
+      ],
+      "commands": "ares-setup-device --add sanooklg --info \"{'host':'TV_ADDRESS','port':'9922','username':'prisoner'}\"\nares-novacom --device sanooklg --getkey\nares-install --device sanooklg sanookflix-lg.ipk\nares-launch --device sanooklg online.sanookflix.tv"
+    },
+    {
+      "id": "samsung",
+      "icon": "📺",
+      "name": "Samsung Smart TV",
+      "platform": "Tizen",
+      "status": "soon",
+      "note": "Coming soon."
+    },
+    {
+      "id": "androidtv",
+      "icon": "📺",
+      "name": "Android TV / Google TV / Fire TV",
+      "platform": "Android",
+      "status": "soon",
+      "note": "Coming soon. One file you can install with the Downloader app."
+    },
+    {
+      "id": "hisense",
+      "icon": "📺",
+      "name": "Hisense",
+      "platform": "VIDAA / Google TV",
+      "status": "soon",
+      "note": "Coming soon. Google TV models will use the Android TV app."
+    }
+  ]
+}
