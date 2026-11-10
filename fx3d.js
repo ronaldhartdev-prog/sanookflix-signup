@@ -131,8 +131,16 @@
       '<ellipse cx="20" cy="20" rx="6" ry="10" fill="#fff" opacity=".55" transform="rotate(-20 20 20)"/><ellipse cx="17" cy="33" rx="2.5" ry="4" fill="#fff" opacity=".35"/>' +
       '<path d="M44 52q6-8 6-20" fill="none" stroke="' + c[0] + '" stroke-width="3" opacity=".5" stroke-linecap="round"/></svg>';
   };
+  // Every mascot is its own character: its own colour (hue), facing left or right, tilt, and its OWN blink rhythm
+  // (period 6-18 s, starting at a random point of it) so the eyes never open or close together.
+  var HUES = [0, 0, 0, 38, -32, 150, 205, 275];
   var MASCOT = function () {
-    return '<span class="mz" style="--bd:' + rnd(7, 12).toFixed(1) + 's;--bdl:-' + rnd(0, 10).toFixed(1) + 's"><img src="mascot-sm.png" alt="" decoding="async"><i class="mz-e l"></i><i class="mz-e r"></i></span>';
+    var bd = rnd(6, 18), hue = HUES[Math.floor(Math.random() * HUES.length)];
+    if (hue) hue += rnd(-10, 10);
+    var flip = Math.random() < 0.5 ? -1 : 1, tilt = rnd(-14, 14);
+    return '<span class="mz" style="--bd:' + bd.toFixed(1) + 's;--bdl:-' + rnd(0, bd).toFixed(1) + 's;' +
+      (hue ? 'filter:hue-rotate(' + hue.toFixed(0) + 'deg) saturate(1.08);' : '') +
+      'transform:scaleX(' + flip + ') rotate(' + tilt.toFixed(0) + 'deg)"><img src="mascot-sm.png" alt="" decoding="async"><i class="mz-e l"></i><i class="mz-e r"></i></span>';
   };
 
   /* ---------- rebuild the floating things ---------- */
